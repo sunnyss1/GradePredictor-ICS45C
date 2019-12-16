@@ -5,10 +5,10 @@ library(ggplot2)
 
 load("ICS45C_clmm.Rmodel")
 alphas <- array(grade_model[["alpha"]])
-betas <- matrix(array(grade_model[["beta"]]), nrow = 1)
+betas <- array(grade_model[["beta"]])
 
 model_pred <- function(data_vals, inv.link = plogis) {
-  Yhat <- betas %*% data_vals
+  Yhat <- crossprod(betas, data_vals)
   Alphas <- c(-1e3, alphas, 1e3)
   sapply(seq(length(alphas) + 1), function(j) {
     inv.link(Alphas[j+1] - Yhat) - inv.link(Alphas[j] - Yhat)
@@ -88,12 +88,13 @@ ui <- fluidPage(
     plotOutput(outputId = "GradeDist"),
     p("I made this (unoffical) app using an ",
       a("ordered logistic regression model", href = "https://en.wikipedia.org/wiki/Ordered_logit"),
-      " which models grades. It uses the grades from 2014 Fall, 2015 Fall, 2016 Fall, 2018 Fall, 2019 Winter, and both sections of 2019 Spring taught by ",
+      " which models grades. It uses the grades from 2014 Fall, 2015 Fall, 2016 Fall, 2018 Fall, 2019 Winter, both sections of 2019 Spring and 2019 Fall taught by ",
       a("Alex Thornton", href = "https://www.ics.uci.edu/~thornton/"),
       "for ICS 45C. The model then generates the probability of getting that grade based the scores you gave it."),
     p("The model uses the Project #0 score, the sum of Project #1 thru Project #4 scores, and the Midterm score to predict the probabilities. The model will also take into account lateness and will refund the highest penalty for you. The highest probable grade will be highlighted in blue."),
     h5("History"),
-    tags$ul(h6("Version 2019.11.17.13: Updated the graph to use ggplot2"),
+    tags$ul(h6("Version 2019.12.16: Updated the model to include the 2019 Fall data"),
+            h6("Version 2019.11.17.13: Updated the graph to use ggplot2"),
             h6("Version 2019.11.17: Added the other quarters data and rebuilt the model"),
             h6("Version 2019.03.30.12: Fixed the sliders to follow the grading policy"),
             h6("Version 2019.03.30: Added sliders for lateness"),
