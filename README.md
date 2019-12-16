@@ -26,5 +26,4 @@ From there you can change the sliders to indicate scores earned along with how l
 
 ## Other Notes
 
-Presently I am excluding the raw data, since it should be in it own repo rather than being shared inside of this repo. I am currently fixing the formatting of it so it can be usable to others.
-
+The raw data for the grades can be found [here](https://github.com/sunnyss1/ICS45C-data).
